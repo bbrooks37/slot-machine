@@ -8,11 +8,26 @@ rows = 3
 cols = 3
 
 symbols_count = {
-    "A": 2,
+    "A": 5,
     "B": 4,
-    "C": 6,
-    "D": 8
+    "C": 3,
+    "D": 7
 }
+
+def get_winnings(columns, lines, bet, values):
+    winnings = 0
+    winning_lines = []
+    for line in range(lines):
+        symbol = columns[0][line]
+        for column in columns:
+            symbol_to_check = column[line]
+            if symbol != symbol_to_check:
+                break
+        else:
+            winnings += values[symbol] * bet
+            winning_lines.append(line + 1)
+    
+    return winnings, winning_lines
 
 def get_slot_machine_spin(rows, cols, symbols):
     all_symbols = []
@@ -83,8 +98,7 @@ def get_bet():
             print("Invalid input. Please enter a numeric value.")
     return amount
 
-def main():
-    balance = deposit()
+def spin(balance):
     lines = get_number_of_lines()
     while True:
         bet = get_bet()
@@ -98,7 +112,26 @@ def main():
 
     slots = get_slot_machine_spin(rows, cols, symbols_count)
     print_slot_machine(slots)
+    winnings, winning_lines = get_winnings(slots, lines, bet, symbols_count)
+    print(f"You won ${winnings}.")
+    print(f"You won on lines:", *winning_lines)
     
-   
+    # Calculate and store the new balance
+    balance += winnings - total_bet
+    print(f"Your balance is ${balance}")
 
+    # Return the new balance so main() can use it
+    return balance
+
+def main():
+    balance = deposit()
+    while True:
+        print(f"Current balance is ${balance}")
+        play_again = input("Press enter to play (q to quit).")
+        if play_again == "q":
+            break
+        balance = spin(balance)
+    
+    print(f"You left with ${balance}")
+   
 main()
