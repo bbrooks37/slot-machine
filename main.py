@@ -40,8 +40,7 @@ def print_slot_machine(columns):
             else:
                 print(column[row], end="")
         print()
-    print()
-    
+
 
 def deposit():
     while True:
@@ -96,6 +95,9 @@ def main():
             break
 
     print(f"You are betting ${bet} on {lines} lines. Total bet is equal to: ${total_bet}")
+
+    slots = get_slot_machine_spin(rows, cols, symbols_count)
+    print_slot_machine(slots)
     
    
 
